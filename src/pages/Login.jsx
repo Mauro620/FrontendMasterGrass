@@ -1,36 +1,14 @@
-import React, { useState } from 'react';
-import { Button, TextField, Container, Typography } from '@mui/material';
+// src/pages/Login.jsx
+import React from "react";
+
 
 function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleLogin = () => {
-    // Lógica de autenticación o llamada a API
-  };
-
   return (
-    <Container maxWidth="sm">
-      <Typography variant="h4" align="center" gutterBottom>Login</Typography>
-      <TextField
-        label="Email"
-        fullWidth
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        margin="normal"
-      />
-      <TextField
-        label="Password"
-        fullWidth
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        margin="normal"
-      />
-      <Button variant="contained" color="primary" fullWidth onClick={handleLogin}>
-        Log In
-      </Button>
-    </Container>
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">Login Page</h1>
+      <p>This is where users will log in to access the application.</p>
+      {/* Aquí puedes agregar un formulario de login */}
+    </div>
   );
 }
 

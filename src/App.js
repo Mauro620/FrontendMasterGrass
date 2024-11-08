@@ -1,20 +1,19 @@
 import React from "react";
-import PrimarySearchAppBar from "./components/Header";
-import Footer from "./components/Footer";
-import ImgCard from "./components/Card";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
 
-function App() {
+const App = () => {
   return (
-    <div className="min-h-screen flex flex-col">
-      <PrimarySearchAppBar />
-      <main className="flex-grow">
-        <div className="px-4">
-          <ImgCard />
-        </div>
-      </main>
-      <Footer />
-    </div>
+    <Router>
+      {" "}
+      {/* Asegúrate de que Router envuelva tu contenido */}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;

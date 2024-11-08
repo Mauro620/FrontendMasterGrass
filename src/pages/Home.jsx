@@ -1,12 +1,18 @@
 import React from 'react';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import Card from '../components/Card';
 
-function MainContent() {
+const Home = () => {
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Welcome to the Main Content</h1>
-      <p>This is the main area of the application.</p>
+    <div>
+      <Header />
+      <div className="body-content flex m-4">
+        <Card className="px-4" />
+      </div>
+      <Footer />
     </div>
   );
-}
+};
 
-export default MainContent;
+export default Home;

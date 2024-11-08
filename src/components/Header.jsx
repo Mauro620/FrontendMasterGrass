@@ -1,197 +1,138 @@
-import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
+import React, { useState } from 'react';
+import { AppBar, Toolbar, Menu, MenuItem, IconButton, Typography, Button, Box, Drawer, List, ListItem, ListItemText, Divider } from '@mui/material';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import MoreIcon from '@mui/icons-material/MoreVert';
+import MenuIcon from '@mui/icons-material/Menu';
+import { styled } from '@mui/system';
+// import { Link } from "react-router-dom";
 
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
+const StyledButton = styled(Button)({
+  backgroundColor: '#4f46e5',
+  color: '#fff',
   '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
+    backgroundColor: '#4338ca',
   },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(3),
-    width: 'auto',
-  },
-}));
+});
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
+export default function ElegantHeader() {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [menuAnchorEl, setMenuAnchorEl] = useState(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
-    },
-  },
-}));
+  const handleOpenMenu = (event) => {
+    setMenuAnchorEl(event.currentTarget);
+  };
 
-export default function PrimarySearchAppBar() {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const handleCloseMenu = () => {
+    setMenuAnchorEl(null);
+  };
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
-  };
-
-  const handleMenuClose = () => {
+  const handleProfileMenuClose = () => {
     setAnchorEl(null);
-    handleMobileMenuClose();
   };
 
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
+  const toggleDrawer = (open) => (event) => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+    setDrawerOpen(open);
   };
-
-  const menuId = 'primary-search-account-menu';
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-    </Menu>
-  );
-
-  const mobileMenuId = 'primary-search-account-menu-mobile';
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
-    </Menu>
-  );
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
+    <AppBar position="sticky" sx={{ background: 'linear-gradient(to right, #4f46e5, #5b21b6)', pl: 2 }}>
+      <Toolbar sx={{ width: '100%' }}>
+        
+        {/* Logo y Nombre - Completamente a la Izquierda */}
+        <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', textAlign: 'left' }}>
+          AlquilaTerrenos
+        </Typography>
+
+        {/* Contenedor de Navegación y Usuario - Centrados */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, justifyContent: 'center', flexGrow: 1 }}>
+          
+          {/* Filtro */}
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
+            <StyledButton
+              variant="contained"
+              startIcon={<FilterAltIcon />}
+              onClick={handleOpenMenu}
+            >
+              Filtros
+            </StyledButton>
+            <Menu
+              anchorEl={menuAnchorEl}
+              open={Boolean(menuAnchorEl)}
+              onClose={handleCloseMenu}
+            >
+              <MenuItem onClick={handleCloseMenu}>Ubicación</MenuItem>
+              <MenuItem onClick={handleCloseMenu}>Rango de Precio</MenuItem>
+            </Menu>
+          </Box>
+
+          {/* Navegación */}
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
+            <Button color="inherit">Inicio</Button>
+            <Button color="inherit">Terrenos</Button>
+            <Button color="inherit">Contacto</Button>
+            <Button color="inherit">Publicar Terreno</Button>
+          </Box>
+          
+          {/* Menú de Usuario */}
+          <IconButton onClick={handleProfileMenuOpen} color="inherit">
+            <AccountCircle />
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleProfileMenuClose}
+            sx={{ mt: '40px' }}
           >
+            <MenuItem onClick={handleProfileMenuClose}>Perfil</MenuItem>
+            <MenuItem onClick={handleProfileMenuClose}>Cerrar Sesión</MenuItem>
+          </Menu>
+        </Box>
+
+        {/* Menú Móvil */}
+        <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+          <IconButton size="large" edge="end" color="inherit" onClick={toggleDrawer(true)}>
             <MenuIcon />
           </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
-          >
-            MUI
-          </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
-          <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+        </Box>
+      </Toolbar>
 
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-          </Box>
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-          </Box>
-        </Toolbar>
-      </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
-    </Box>
+      {/* Drawer para Menú Móvil */}
+      <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
+        <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)} onKeyDown={toggleDrawer(false)}>
+          <List>
+            <ListItem button>
+              <ListItemText primary="Inicio" />
+            </ListItem>
+            <ListItem button>
+              <ListItemText primary="Terrenos" />
+            </ListItem>
+            <ListItem button>
+              <ListItemText primary="Contacto" />
+            </ListItem>
+            <ListItem button>
+              <ListItemText primary="Publicar Terreno" />
+            </ListItem>
+          </List>
+          <Divider />
+          <List>
+            <ListItem button onClick={handleProfileMenuOpen}>
+              <AccountCircle sx={{ marginRight: 1 }} />
+              <ListItemText primary="Perfil" />
+            </ListItem>
+            <ListItem button onClick={handleProfileMenuClose}>
+              <ListItemText primary="Cerrar Sesión" />
+            </ListItem>
+          </List>
+        </Box>
+      </Drawer>
+    </AppBar>
   );
 }

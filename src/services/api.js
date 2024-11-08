@@ -1,5 +1,6 @@
 // src/services/api.js
 import { config } from "../apiConfig";
+import "./index.css";
 
 const fetchData = async (endpoint, options = {}) => {
   try {

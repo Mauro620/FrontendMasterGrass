@@ -1,16 +1,16 @@
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import TerrenoDetail from '../components/TerrenoDetail';
-import { AuthContext } from '../context/AuthContext';
-import { Navigate } from 'react-router-dom';
-import React, { useContext } from 'react';
+// import { AuthContext } from '../context/AuthContext';
+// import { Navigate } from 'react-router-dom';
+// import React, { useContext } from 'react';
 
 const TerrenoView = () => {
-  const { authToken } = useContext(AuthContext);
+  // const { authToken } = useContext(AuthContext);
 
-  if (!authToken) {
-    return <Navigate to="/login" />; // Redirige al login si no hay token
-  }
+  // if (!authToken) {
+  //   return <Navigate to="/login" />; // Redirige al login si no hay token
+  // }
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header */}

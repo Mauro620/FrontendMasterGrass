@@ -4,7 +4,6 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
 import { styled } from '@mui/system';
-// import { Link } from "react-router-dom";
 
 const StyledButton = styled(Button)({
   backgroundColor: '#4f46e5',
@@ -48,14 +47,18 @@ export default function ElegantHeader() {
         
         {/* Logo y Nombre - Completamente a la Izquierda */}
         <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', textAlign: 'left' }}>
-          AlquilaTerrenos
+          MasterGrass
         </Typography>
 
         {/* Contenedor de Navegación y Usuario - Centrados */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, justifyContent: 'center', flexGrow: 1 }}>
           
           {/* Filtro */}
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
+          <Box sx={{ display: 
+            { 
+              xs: 'none',
+              md: 'flex' 
+            }, alignItems: 'center' }}>
             <StyledButton
               variant="contained"
               startIcon={<FilterAltIcon />}
@@ -81,6 +84,20 @@ export default function ElegantHeader() {
             <Button color="inherit">Publicar Terreno</Button>
           </Box>
           
+          {/* Botón Añadir Espacio */}
+          <Button
+            sx={{
+              color: '#ffffff',
+              fontSize: '0.875rem',
+              textTransform: 'none',
+              textDecoration: 'underline',
+              padding: '0 10px',
+            }}
+            href="/add_terreno"
+          >
+            Añadir espacio a MasterGrass
+          </Button>
+
           {/* Menú de Usuario */}
           <IconButton onClick={handleProfileMenuOpen} color="inherit">
             <AccountCircle />

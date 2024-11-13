@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Card from '@mui/material/Card';
-// import CardActions from '@mui/material/CardActions';
+import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-// import Button from '@mui/material/Button';
+import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 // import ListSubheader from '@mui/material/ListSubheader';
 // import List from '@mui/material/List';
@@ -127,12 +127,11 @@ export default function ImgCard() {
             <Typography variant="h5" sx={{ color: 'text.secondary', font: '' }}>
               {`Precio: $${terreno.precio || 'N/A'} Mensual`}
             </Typography>
-            {/* <NestedList historial={terreno.historialAlquileres || []} /> */}
           </CardContent>
-          {/* <CardActions>
+          <CardActions>
             <Button size="small">Compartir</Button>
             <Button size="small">Más información</Button>
-          </CardActions> */}
+          </CardActions>
         </Card>
       ))}
     </>

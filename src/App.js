@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import TerrenoView from "./pages/TerrenoView";
 import CrearTerreno from "./pages/AnadirTerreno";
+import CargarImagenes from "./pages/UploadImages";
 import { AuthProvider } from "./context/AuthContext"; // Importa el AuthProvider
 
 const App = () => {
@@ -17,6 +18,10 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/terreno" element={<TerrenoView />} />
+          <Route
+            path="/terreno/imagenes/:idTerreno"
+            element={<CargarImagenes />}
+          />
           <Route path="/add_terreno" element={<CrearTerreno />} />
         </Routes>
       </Router>

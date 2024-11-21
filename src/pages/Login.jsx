@@ -94,7 +94,7 @@ const Login = () => {
             <>
             <TextField
                 label="Numero de documento"
-                classname="field input"
+                className="field input"
                 name="IdUsuario"
                 fullWidth
                 margin="normal"
@@ -103,7 +103,7 @@ const Login = () => {
               />
               <TextField
                 label="Nombre de usuario"
-                classname="field input"
+                className="field input"
                 name="nombreUsuario"
                 fullWidth
                 margin="normal"
@@ -112,7 +112,7 @@ const Login = () => {
               />
               <TextField
                 label="Teléfono"
-                classname="field input"
+                className="field input"
                 name="telefono"
                 fullWidth
                 margin="normal"
@@ -123,7 +123,7 @@ const Login = () => {
           )}
           <TextField
             label="Correo electrónico"
-            classname="field input"
+            className="field input"
             name="email"
             type="email"
             fullWidth
@@ -133,7 +133,7 @@ const Login = () => {
           />
           <TextField
             label="Contraseña"
-            classname="field input-field"
+            className="field input-field"
             name="contrasena"
             type="password"
             fullWidth

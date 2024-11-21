@@ -1,30 +1,60 @@
-import React, { useState } from 'react';
-import { AppBar, Toolbar, Menu, MenuItem, IconButton, Typography, Button, Box, Drawer, List, ListItem, ListItemText, Divider } from '@mui/material';
-import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import React, { useState, useContext, useEffect } from 'react';
+import {
+  AppBar,
+  Toolbar,
+  Menu,
+  MenuItem,
+  IconButton,
+  Typography,
+  Button,
+  Box,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+} from '@mui/material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import SearchFilter from './FilterBar';
 import MenuIcon from '@mui/icons-material/Menu';
-import { styled } from '@mui/system';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
-const StyledButton = styled(Button)({
-  backgroundColor: '#4f46e5',
-  color: '#fff',
-  '&:hover': {
-    backgroundColor: '#4338ca',
-  },
-});
-
-export default function ElegantHeader() {
+export default function ElegantHeader({ onFiltersChange }) {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const navigate = useNavigate();
+  const { authToken, logout } = useContext(AuthContext); // Asegúrate de que `user` contenga el nombre del usuario.
+  const [perfil, setPerfil] = useState(null);
+  const [loadingPerfil, setLoadingPerfil] = useState(true);
 
-  const handleOpenMenu = (event) => {
-    setMenuAnchorEl(event.currentTarget);
-  };
+  useEffect(() => {
+    const authToken = localStorage.getItem("authToken");
 
-  const handleCloseMenu = () => {
-    setMenuAnchorEl(null);
-  };
+    if (!authToken) {
+      navigate("/login");
+      return;
+    }
+
+    fetch('http://localhost:8070/usuario/perfil', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${authToken}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      setPerfil(data[0]);
+      setLoadingPerfil(false);
+    })
+    .catch((error) => {
+      console.error('Error al obtener el perfil del usuario:', error);
+      setLoadingPerfil(false);
+    });
+  }, [navigate]);
+
+
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -41,113 +71,118 @@ export default function ElegantHeader() {
     setDrawerOpen(open);
   };
 
+  const handleProfileClick = () => {
+    handleProfileMenuClose();
+    if (authToken) {
+      navigate('/user');
+    } else {
+      navigate('/login');
+    }
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
   return (
-    <AppBar position="sticky" sx={{ background: 'linear-gradient(to right, #4f46e5, #5b21b6)', pl: 2 }}>
-      <Toolbar sx={{ width: '100%' }}>
-        
-        {/* Logo y Nombre - Completamente a la Izquierda */}
-        <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', textAlign: 'left' }}>
+    <AppBar position="sticky" sx={{ background: 'linear-gradient(to right, #15B392, #D2FF72)', pl: 2 }}>
+      <Toolbar>
+        <Typography
+          variant="h6"
+          sx={{ fontWeight: 'bold', cursor: 'pointer' }}
+          onClick={() => navigate('/')}
+        >
           MasterGrass
         </Typography>
-
-        {/* Contenedor de Navegación y Usuario - Centrados */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, justifyContent: 'center', flexGrow: 1 }}>
-          
-          {/* Filtro */}
-          <Box sx={{ display: 
-            { 
-              xs: 'none',
-              md: 'flex' 
-            }, alignItems: 'center' }}>
-            <StyledButton
-              variant="contained"
-              startIcon={<FilterAltIcon />}
-              onClick={handleOpenMenu}
-            >
-              Filtros
-            </StyledButton>
-            <Menu
-              anchorEl={menuAnchorEl}
-              open={Boolean(menuAnchorEl)}
-              onClose={handleCloseMenu}
-            >
-              <MenuItem onClick={handleCloseMenu}>Ubicación</MenuItem>
-              <MenuItem onClick={handleCloseMenu}>Rango de Precio</MenuItem>
-            </Menu>
-          </Box>
-
-          {/* Navegación */}
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
-            <Button color="inherit">Inicio</Button>
-            <Button color="inherit">Terrenos</Button>
-            <Button color="inherit">Contacto</Button>
-            <Button color="inherit">Publicar Terreno</Button>
-          </Box>
-          
-          {/* Botón Añadir Espacio */}
-          <Button
-            sx={{
-              color: '#ffffff',
-              fontSize: '0.875rem',
-              textTransform: 'none',
-              textDecoration: 'underline',
-              padding: '0 10px',
-            }}
-            href="/add_terreno"
-          >
-            Añadir espacio a MasterGrass
+        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'center' }}>
+          <Button color="inherit" onClick={() => navigate('/')} size="large">
+            Inicio
           </Button>
-
-          {/* Menú de Usuario */}
-          <IconButton onClick={handleProfileMenuOpen} color="inherit">
-            <AccountCircle />
-          </IconButton>
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleProfileMenuClose}
-            sx={{ mt: '40px' }}
-          >
-            <MenuItem onClick={handleProfileMenuClose}>Perfil</MenuItem>
-            <MenuItem onClick={handleProfileMenuClose}>Cerrar Sesión</MenuItem>
-          </Menu>
+          <Button color="inherit" onClick={() => navigate('/add_terreno')} size="large">
+            Publicar Terreno
+          </Button>
         </Box>
 
-        {/* Menú Móvil */}
-        <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-          <IconButton size="large" edge="end" color="inherit" onClick={toggleDrawer(true)}>
-            <MenuIcon />
-          </IconButton>
-        </Box>
+        {authToken ? (
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography sx={{ mr: 1 }}>{perfil?.nombreUsuario}</Typography> {/* Muestra el nombre del usuario */}
+            <IconButton onClick={handleProfileMenuOpen} color="inherit" size="large">
+              <AccountCircle />
+            </IconButton>
+          </Box>
+        ) : (
+          <>
+            <Button color="inherit" onClick={() => navigate('/login')}>
+              Iniciar Sesión
+            </Button>
+            <Button color="inherit" onClick={() => navigate('/login#')}>
+              Registrarse
+            </Button>
+          </>
+        )}
+
+        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleProfileMenuClose}>
+          {authToken ? (
+            <>
+              <MenuItem onClick={handleProfileClick}>Perfil</MenuItem>
+              <MenuItem onClick={() => navigate('/add_ganado')}>Agregar Ganado</MenuItem>
+              <Divider sx={{ my: 0.5 }} />
+              <MenuItem onClick={handleLogout}>Cerrar Sesión</MenuItem>
+            </>
+          ) : null}
+        </Menu>
+
+        <IconButton
+          size="large"
+          edge="end"
+          color="inherit"
+          onClick={toggleDrawer(true)}
+          sx={{ display: { xs: 'flex', md: 'none' } }}
+        >
+          <MenuIcon />
+        </IconButton>
       </Toolbar>
 
-      {/* Drawer para Menú Móvil */}
+      <SearchFilter onSearch={(filters) => onFiltersChange(filters)} />
+
+      {/* Menú Móvil */}
       <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
-        <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)} onKeyDown={toggleDrawer(false)}>
+        <Box
+          sx={{ width: 250 }}
+          role="presentation"
+          onClick={toggleDrawer(false)}
+          onKeyDown={toggleDrawer(false)}
+        >
           <List>
-            <ListItem button>
+            <ListItem button onClick={() => navigate('/')}>
               <ListItemText primary="Inicio" />
             </ListItem>
-            <ListItem button>
-              <ListItemText primary="Terrenos" />
-            </ListItem>
-            <ListItem button>
-              <ListItemText primary="Contacto" />
-            </ListItem>
-            <ListItem button>
+            <ListItem button onClick={() => navigate('/add_terreno')}>
               <ListItemText primary="Publicar Terreno" />
             </ListItem>
           </List>
           <Divider />
-          <List>
-            <ListItem button onClick={handleProfileMenuOpen}>
-              <AccountCircle sx={{ marginRight: 1 }} />
-              <ListItemText primary="Perfil" />
-            </ListItem>
-            <ListItem button onClick={handleProfileMenuClose}>
-              <ListItemText primary="Cerrar Sesión" />
-            </ListItem>
-          </List>
+          {authToken ? (
+            <List>
+              <ListItem button onClick={handleProfileClick}>
+                <AccountCircle sx={{ marginRight: 1 }} />
+                <ListItemText primary="Perfil" />
+              </ListItem>
+              <ListItem button onClick={handleLogout}>
+                <ListItemText primary="Cerrar Sesión" />
+              </ListItem>
+            </List>
+          ) : (
+            <List>
+              <ListItem button onClick={() => navigate('/login')}>
+                <ListItemText primary="Iniciar Sesión" />
+              </ListItem>
+              <ListItem button onClick={() => navigate('/login')}>
+                <ListItemText primary="Registrarse" />
+              </ListItem>
+            </List>
+          )}
         </Box>
       </Drawer>
     </AppBar>

@@ -3,9 +3,9 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import TerrenoView from "./pages/TerrenoView";
 import CrearTerreno from "./pages/AnadirTerreno";
 import CargarImagenes from "./pages/UploadImages";
+import UserProfile from "./pages/UserProfile";
 import { AuthProvider } from "./context/AuthContext"; // Importa el AuthProvider
 
 const App = () => {
@@ -17,7 +17,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/terreno" element={<TerrenoView />} />
+          <Route path="/user" element={<UserProfile />} />
           <Route
             path="/terreno/imagenes/:idTerreno"
             element={<CargarImagenes />}

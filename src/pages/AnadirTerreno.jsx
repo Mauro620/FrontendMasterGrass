@@ -48,7 +48,7 @@ const AñadirTerreno = () => {
             console.error('Error al obtener el perfil del usuario:', error);
             setLoadingPerfil(false);
         });
-    }, [] );
+    }, [navigate] );
 
     const handleChangeTerreno = (e) => {
         const { name, value } = e.target;
@@ -71,51 +71,51 @@ const AñadirTerreno = () => {
     };
 
     const handleAnadirTerreno = () => {
-    if (!perfil) {
-        alert("No se pudo obtener el perfil del usuario.");
-        return;
-    }
+        if (!perfil) {
+            alert("No se pudo obtener el perfil del usuario.");
+            return;
+        }
 
-    const authToken = localStorage.getItem("authToken");
+        const authToken = localStorage.getItem("authToken");
 
-    const nuevoTerreno = {
-        ...terreno,
-        emailUsuario: perfil.email
+        const nuevoTerreno = {
+            ...terreno,
+            emailUsuario: perfil.email
+        };
+
+        setLoading(true); // Activar el estado de carga
+
+        fetch('http://localhost:8070/terreno/ingresar_terreno', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(nuevoTerreno)
+        })
+        .then(response => response.json())
+        .then(data => {
+            setLoading(false); // Desactivar el estado de carga
+            Swal.fire({
+                icon: 'success',
+                title: 'Terreno añadido exitosamente',
+                text: 'El terreno se ha añadido correctamente.',
+                confirmButtonText: 'Aceptar'
+            }).then(() => {
+                // Redirigir a la página de carga de imágenes, pasando el idTerreno
+                navigate(`/terreno/imagenes/${terreno.idTerreno}`);
+            });
+        })
+        .catch(error => {
+            setLoading(false); // Desactivar el estado de carga
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Ocurrió un error al añadir el terreno.',
+                confirmButtonText: 'Aceptar'
+            });
+        });
     };
-
-    setLoading(true); // Activar el estado de carga
-
-    fetch('http://localhost:8070/terreno/ingresar_terreno', {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${authToken}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(nuevoTerreno)
-    })
-    .then(response => response.json())
-    .then(data => {
-        setLoading(false); // Desactivar el estado de carga
-        Swal.fire({
-            icon: 'success',
-            title: 'Terreno añadido exitosamente',
-            text: 'El terreno se ha añadido correctamente.',
-            confirmButtonText: 'Aceptar'
-        }).then(() => {
-            // Redirigir a la página de carga de imágenes, pasando el idTerreno
-            navigate(`/terreno/imagenes/${terreno.idTerreno}`);
-        });
-    })
-    .catch(error => {
-        setLoading(false); // Desactivar el estado de carga
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Ocurrió un error al añadir el terreno.',
-            confirmButtonText: 'Aceptar'
-        });
-    });
-};
 
     return (
         <div className="flex justify-center items-center h-screen p-4">
